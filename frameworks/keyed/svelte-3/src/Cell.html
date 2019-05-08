@@ -1,0 +1,9 @@
+<svelte:options immutable={true} />
+<script>
+  export let className;
+</script>
+{#if className}
+<td class={className}>
+  <slot></slot>
+</td>
+{/if}

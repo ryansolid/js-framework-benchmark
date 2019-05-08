@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
@@ -23,8 +22,7 @@ module.exports = {
 				{
 					loader: 'babel-loader',
 					options: {
-						presets: ['@babel/preset-env', '@babel/preset-react'],
-						plugins: ['@babel/plugin-proposal-class-properties'],
+						presets: ['@babel/preset-react'],
 					}
 				}
 			]
@@ -45,6 +43,7 @@ module.exports = {
 					compress: {
 						ecma: 5,
 						warnings: false,
+						reduce_funcs: false,
 						// Disabled because of an issue with Uglify breaking seemingly valid code:
 						// https://github.com/facebook/create-react-app/issues/2376
 						// Pending further investigation:
@@ -70,9 +69,4 @@ module.exports = {
 			}),
 		]
 	},
-	plugins: [
-		new webpack.DefinePlugin({
-			'process.env': { NODE_ENV: JSON.stringify('production') }
-		}),
-	],
 };

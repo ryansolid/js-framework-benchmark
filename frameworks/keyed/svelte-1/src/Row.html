@@ -1,0 +1,34 @@
+<svelte:options immutable={true} />
+<script>
+    import { data, selected } from './store';
+    import GlyphIcon from './GlyphIcon.html';
+
+    export let id;
+    export let label;
+
+    function select() {
+        selected.set(id);
+    }
+
+    function remove() {
+        data.update((d) => {
+            const idx = d.findIndex((item) => item.id === id);
+            const newData = d.slice();
+            newData.splice(idx, 1);
+            return newData;
+        });
+    }
+</script>
+
+<tr class="{$selected === id ? 'danger' : '' }">
+    <td class="col-md-1">{id}</td>
+    <td class="col-md-4">
+        <a on:click={select}>{label}</a>
+    </td>
+    <td class="col-md-1">
+        <a on:click={remove}>
+            <GlyphIcon />
+        </a>
+    </td>
+    <td class="col-md-6"></td>
+</tr>

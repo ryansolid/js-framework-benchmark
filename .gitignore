@@ -27,14 +27,12 @@ build/Release
 node_modules
 jspm_packages
 bower_components
-dist
 
 .idea
 .vscode
 .DS_Store
 *.iml
 TODO.txt
-*/dist/
 angular*/app/app.js
 angular*/app/app.js.map
 angular*/src/app.ngsummary.json
@@ -59,8 +57,6 @@ marko-*/src/xtable.marko
 # keep root yarn.lock in repo so that travis will install yarn
 yarn.lock
 !/yarn.lock
-
-package-lock.json
 
 # angular 2 aot
 angular-*/lib/

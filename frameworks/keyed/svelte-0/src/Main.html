@@ -1,0 +1,116 @@
+<script>
+    const random = (max) => Math.round(Math.random() * 1000) % max;
+    const A = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean",
+        "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important",
+        "inexpensive", "cheap", "expensive", "fancy"];
+    const C = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
+    const N = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza",
+        "mouse", "keyboard"];
+
+    let nextId = 1;
+    let data = [];
+    let selected = 0;
+    function buildData(count) {
+        const data = Array(count);
+        for (let i = 0; i < count; i++) {
+            data[i] = { id: nextId++, label: `${A[random(A.length)]} ${C[random(C.length)]} ${N[random(N.length)]}` };
+        }
+        return data;
+    }
+
+    const add = () => {
+        data = data.concat(buildData(1000));
+    };
+    const clear = () => {
+        data = [];
+        selected = 0;
+    };
+    const partialUpdate = () => {
+        for (let i = 0; i < data.length; i += 10) {
+            data[i].label += ' !!!';
+        }
+    };
+    const remove = (id) => {
+        const idx = data.findIndex((item) => item.id === id);
+        data = data.slice();
+        data.splice(idx, 1);
+    };
+    const run = () => {
+        data = buildData(1000);
+        selected = 0;
+    };
+    const runLots = () => {
+        data = buildData(10000);
+        selected = 0;
+    };
+    const select = (id) => {
+        selected = id;
+    };
+    const swapRows = () => {
+        if (data.length > 998) {
+            data = data.slice();
+            const tmp = data[1];
+            data[1] = data[998];
+            data[998] = tmp;
+        }
+    };
+
+    const click = ({ target }) => {
+        const id = Number.parseInt(target.closest("tr").firstChild.firstChild.nodeValue);
+        if (target.matches(".glyphicon-remove")) {
+            remove(id);
+        } else {
+            select(id);
+        }
+    };
+</script>
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Svelte (keyed)</h1>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-sm-6 smallpad">
+                    <button type="button" class="btn btn-primary btn-block" id="run" on:click={run}>Create 1,000
+                        rows</button>
+                </div>
+                <div class="col-sm-6 smallpad">
+                    <button type="button" class="btn btn-primary btn-block" id="runlots" on:click={runLots}>Create
+                        10,000
+                        rows</button>
+                </div>
+                <div class="col-sm-6 smallpad">
+                    <button type="button" class="btn btn-primary btn-block" id="add" on:click={add}>Append 1,000
+                        rows</button>
+                </div>
+                <div class="col-sm-6 smallpad">
+                    <button type="button" class="btn btn-primary btn-block" id="update" on:click={partialUpdate}>Update
+                        every
+                        10th row</button>
+                </div>
+                <div class="col-sm-6 smallpad">
+                    <button type="button" class="btn btn-primary btn-block" id="clear" on:click={clear}>Clear</button>
+                </div>
+                <div class="col-sm-6 smallpad">
+                    <button type="button" class="btn btn-primary btn-block" id="swaprows" on:click={swapRows}>Swap
+                        Rows</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table table-hover table-striped test-data">
+    <tbody on:click={click}>
+        {#each data as row, num (row.id)}
+        <tr class="{selected === row.id ? 'danger': ''}">
+          <td class="col-md-1">{row.id}</td>
+          <td class="col-md-4"><a>{row.label}</a></td>
+          <td class="col-md-1"><a><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+          <td class="col-md-6"></td>
+        </tr>
+        {/each}
+   </tbody>
+</table>
+<span class="preloadicon glyphicon glyphicon-remove" aria-hidden="true"></span>
