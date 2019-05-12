@@ -9,15 +9,16 @@ const colours = ['red', 'yellow', 'blue', 'green', 'pink', 'brown', 'purple', 'b
 const nouns = ['table', 'chair', 'house', 'bbq', 'desk', 'car', 'pony', 'cookie', 'sandwich', 'burger', 'pizza',
   'mouse', 'keyboard'];
 
-const _random = max => {
-  return Math.round(Math.random() * 1000) % max;
-};
+let seed = 0;
+// random function is replaced to remove any randomness from the benchmark.
+const random = (max) => seed++ % max;
 const buildData = count => {
   const data = [];
   for (let i = 0; i < count; i++) {
     data.push({
       id: did++,
-      label: `${adjectives[_random(adjectives.length)]} ${colours[_random(colours.length)]} ${nouns[_random(nouns.length)]}`,
+      label: `${adjectives[random(adjectives.length)]} ${colours[random(colours.length)]} ${nouns[random(nouns.length)]}`,
+      selected: false,
     });
   }
   return data;

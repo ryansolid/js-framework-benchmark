@@ -1,7 +1,9 @@
 import { _, render, Events, onClick, withNextFrame, elementProto, statelessComponent, component, TrackByKey, key, useMutationEffect, getDOMNode } from "ivi";
 import { h1, div, span, table, tbody, tr, td, a, button } from "ivi-html";
 
-const random = (max) => Math.round(Math.random() * 1000) % max;
+let seed = 0;
+// random function is replaced to remove any randomness from the benchmark.
+const random = (max) => seed++ % max;
 const A = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"];
 const C = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
 const N = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse", "keyboard"];
@@ -64,7 +66,7 @@ const Rows = component((c) => {
     if (selected !== 0) {
       const idx = state.data.findIndex((item) => item.id === selected);
       if (idx !== -1) {
-        const tr = getDOMNode(c).children[idx];
+        const tr = getDOMNode(c).childNodes[idx];
         tr.className = "danger";
         return () => { tr.className = ""; };
       }

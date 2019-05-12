@@ -6,6 +6,21 @@ const adjectives = [
 const colours = ['red', 'yellow', 'blue', 'green', 'pink', 'brown', 'purple', 'brown', 'white', 'black', 'orange'];
 const nouns = ['table', 'chair', 'house', 'bbq', 'desk', 'car', 'pony', 'cookie', 'sandwich', 'burger', 'pizza', 'mouse', 'keyboard'];
 
+let seed = 0;
+// random function is replaced to remove any randomness from the benchmark.
+const random = (max) => seed++ % max;
+const buildData = count => {
+  const data = [];
+  for (let i = 0; i < count; i++) {
+    data.push({
+      id: did++,
+      label: `${adjectives[random(adjectives.length)]} ${colours[random(colours.length)]} ${nouns[random(nouns.length)]}`,
+      selected: false,
+    });
+  }
+  return data;
+};
+
 let data = [];
 let did = 1;
 let selected = -1;
@@ -64,20 +79,6 @@ const update = () => {
   }
   _render();
 };
-const buildData = count => {
-  const data = [];
-  for (let i = 0; i < count; i++) {
-    data.push({
-      id: did++,
-      label: `${adjectives[_random(adjectives.length)]} ${colours[_random(colours.length)]} ${nouns[_random(nouns.length)]}`,
-      selected: false,
-    });
-  }
-  return data;
-};
-const _random = max => {
-  return Math.round(Math.random() * 1000) % max;
-};
 
 const container = document.getElementById('container');
 const _render = () => {
@@ -121,8 +122,8 @@ const template = () => html`
   </div>
   <table @click=${interact} class="table table-hover table-striped test-data">
     <tbody>${repeat(data,
-      item => item.id,
-      item => html`
+  item => item.id,
+  item => html`
       <tr id=${item.id} class=${item.selected ? 'danger' : ''}>
         <td class="col-md-1">${item.id}</td>
         <td class="col-md-4">

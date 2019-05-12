@@ -3,16 +3,16 @@ import ReactDOM from "react-dom";
 import { createStore } from "redux";
 import { Provider, useDispatch, useSelector } from "react-redux";
 
-function random(max) {
-  return Math.round(Math.random() * 1000) % max;
-}
-
 const A = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean",
   "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive",
   "cheap", "expensive", "fancy"];
 const C = ["red", "yellow", "blue", "green", "pink", "brown", "purple", "brown", "white", "black", "orange"];
 const N = ["table", "chair", "house", "bbq", "desk", "car", "pony", "cookie", "sandwich", "burger", "pizza", "mouse",
   "keyboard"];
+
+let seed = 0;
+// random function is replaced to remove any randomness from the benchmark.
+const random = (max) => seed++ % max;
 
 let nextId = 1;
 
