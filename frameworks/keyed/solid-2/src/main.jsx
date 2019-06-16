@@ -1,4 +1,4 @@
-import { createRoot, createState } from 'solid-js';
+import { createRoot, createState, selectWhen } from 'solid-js';
 
 let idCounter = 1;
 const adjectives = ["pretty", "large", "big", "small", "tall", "short", "long", "handsome", "plain", "quaint", "clean", "elegant", "easy", "angry", "crazy", "helpful", "mushy", "odd", "unsightly", "adorable", "important", "inexpensive", "cheap", "expensive", "fancy"],
@@ -21,13 +21,14 @@ function buildData(count) {
 }
 
 const Button = ({ id, text, fn }) => <div class='col-sm-6 smallpad'><button id={id} class='btn btn-primary btn-block' type='button' onClick={fn}>{text}</button></div>;
-const RemoveIcon = ({ preload }) => <span class={(preload ? 'preloadicon glyphicon glyphicon-remove' : 'glyphicon glyphicon-remove')} aria-hidden="true"></span>;
-const Row = ({ state, row, select, remove }) => (
-  <tr class={(state.selected === row.id ? 'danger' : '')}>
-    <td class='col-md-1'>{(row.id)}</td>
-    <td class='col-md-4'><a onClick={() => { select(row.id); }}>{(row.label)}</a></td>
-    <td class='col-md-1'><a onClick={() => { remove(row.id); }}><RemoveIcon preload={false} /></a></td>
-    <td class='col-md-6'></td>
+const Cell = ({ className, children }) => <td class={className}>{children}</td>;
+const RemoveIcon = ({ preload }) => <span class={preload ? 'preloadicon glyphicon glyphicon-remove' : 'glyphicon glyphicon-remove'} aria-hidden="true"></span>;
+const Row = ({ row, select, remove }) => (
+  <tr model={row.id}>
+    <Cell className='col-md-1'>{row.id}</Cell>
+    <Cell className='col-md-4'><a onClick={select}>{(row.label)}</a></Cell>
+    <Cell className='col-md-1'><a onClick={remove}><RemoveIcon preload={false} /></a></Cell>
+    <Cell className='col-md-6' />
   </tr>
 );
 
@@ -39,8 +40,8 @@ const App = () => {
     update = () => setState('data', { by: 10 }, 'label', l => l + ' !!!'),
     swapRows = () => setState('data', d => d.length > 998 ? { 1: d[998], 998: d[1] } : d),
     clear = () => setState({ data: [], selected: null }),
-    select = (id) => setState('selected', id),
-    remove = (id) => setState('data', d => {
+    select = (e, id) => setState('selected', id),
+    remove = (e, id) => setState('data', d => {
       const idx = d.findIndex(d => d.id === id);
       return [...d.slice(0, idx), ...d.slice(idx + 1)];
     });
@@ -58,7 +59,7 @@ const App = () => {
       </div></div>
     </div></div>
     <table class='table table-hover table-striped test-data'><tbody>
-      <$ each={state.data}>{row => <Row state={state} row={row} select={select} remove={remove} />}</$>
+      <$ each={state.data} afterRender={selectWhen(() => state.selected, 'danger')}>{row => <Row row={row} select={select} remove={remove} />}</$>
     </tbody></table>
     <RemoveIcon preload={true} />
   </div>

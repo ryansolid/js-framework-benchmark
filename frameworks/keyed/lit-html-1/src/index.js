@@ -47,6 +47,16 @@ const clear = () => {
   selected = 0;
   _render();
 };
+const interact = e => {
+  const td = e.target.closest('td');
+  const interaction = td.getAttribute('data-interaction');
+  const id = parseInt(td.parentNode.id);
+  if (interaction === 'delete') {
+    del(id);
+  } else {
+    select(id);
+  }
+};
 const del = id => {
   data.splice(data.findIndex(d => d.id === id), 1);
   _render();
@@ -78,10 +88,10 @@ const _render = () => {
 const Button = (id, cb, title) => html`<div class="col-sm-6 smallpad"><button type="button" class="btn btn-primary btn-block" id=${id} @click=${cb}>${title}</button></div>`;
 const RemoveIcon = (preload) => html`<span class=${preload ? "preloadicon glyphicon glyphicon-remove" : "glyphicon glyphicon-remove"} aria-hidden="true"></span>`;
 const Row = ({ id, label }) => html`
-<tr class=${selected === id ? 'danger' : ''}>
+<tr id=${id} class=${selected === id ? 'danger' : ''}>
   <td class="col-md-1">${id}</td>
-  <td class="col-md-4"><a @click=${() => { select(id); }}>${label}</a></td>
-  <td class="col-md-1"><a @click=${() => { del(id); }}>${RemoveIcon()}</a></td>
+  <td class="col-md-4"><a>${label}</a></td>
+  <td class="col-md-1" data-interaction='delete'><a>${RemoveIcon()}</a></td>
   <td class="col-md-6"></td>
 </tr>
 `;
@@ -105,7 +115,7 @@ const template = () => html`
       </div>
     </div>
   </div>
-  <table class="table table-hover table-striped test-data">
+  <table @click=${interact} class="table table-hover table-striped test-data">
     <tbody>${repeat(data, item => item.id, item => Row(item))}</tbody>
   </table>
   ${RemoveIcon(true)}

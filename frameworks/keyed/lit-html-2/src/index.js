@@ -47,6 +47,15 @@ const clear = () => {
   selected = 0;
   _render();
 };
+const interact = e => {
+  const tr = e.target.closest('tr');
+  const id = parseInt(tr.id);
+  if (e.target.matches(".glyphicon-remove")) {
+    del(id);
+  } else {
+    select(id);
+  }
+};
 const del = id => {
   data.splice(data.findIndex(d => d.id === id), 1);
   _render();
@@ -79,10 +88,10 @@ const Button = (id, cb, title) => html`<div class="col-sm-6 smallpad"><button ty
 const RemoveIcon = (preload) => html`<span class=${preload ? "preloadicon glyphicon glyphicon-remove" : "glyphicon glyphicon-remove"} aria-hidden="true"></span>`;
 const Cell = (className, children) => html`<td class=${className}>${children}</td>`;
 const Row = ({ id, label }) => html`
-<tr class=${selected === id ? 'danger' : ''}>
+<tr id=${id} class=${selected === id ? 'danger' : ''}>
   ${Cell("col-md-1", id)}
-  ${Cell("col-md-4", html`<a @click=${() => { select(id); }}>${label}</a>`)}
-  ${Cell("col-md-1", html`<a @click=${() => { del(id); }}>${RemoveIcon()}</a>`)}
+  ${Cell("col-md-4", html`<a>${label}</a>`)}
+  ${Cell("col-md-1", html`<a>${RemoveIcon()}</a>`)}
   ${Cell("col-md-6")}
 </tr>
 `;
@@ -106,7 +115,7 @@ const template = () => html`
       </div>
     </div>
   </div>
-  <table class="table table-hover table-striped test-data">
+  <table @click=${interact} class="table table-hover table-striped test-data">
     <tbody>${repeat(data, item => item.id, item => Row(item))}</tbody>
   </table>
   ${RemoveIcon(true)}

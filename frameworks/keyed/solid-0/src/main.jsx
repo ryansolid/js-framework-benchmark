@@ -20,10 +20,7 @@ function buildData(count) {
   return data;
 }
 
-const Button = ({ id, text, fn }) =>
-  <div class='col-sm-6 smallpad'>
-    <button id={id} class='btn btn-primary btn-block' type='button' onClick={fn}>{text}</button>
-  </div>
+const Button = ({ id, text, fn }) => <div class='col-sm-6 smallpad'><button id={id} class='btn btn-primary btn-block' type='button' onClick={fn}>{text}</button></div>;
 
 const App = () => {
   const [state, setState] = createState({ data: [], selected: null }),
