@@ -28,7 +28,7 @@ export abstract class Benchmark {
         this.type = benchmarkInfo.type;
         this.label = benchmarkInfo.label;
         this.description = benchmarkInfo.description;
-        this.throttleCPU = benchmarkInfo.throttleCPU;
+        // this.throttleCPU = benchmarkInfo.throttleCPU;
         this.allowBatching = benchmarkInfo.allowBatching;
     }
     abstract init(driver: WebDriver, framework: FrameworkData): Promise<any>;

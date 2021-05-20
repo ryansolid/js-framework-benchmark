@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "js-framework-benchmark-vanillajs-wc",
+  "version": "1.0.0",
+  "description": "Vanilla.JS WebComponent demo",
+  "js-framework-benchmark": {
+    "frameworkVersion": "",
+    "issues": [772]
+  },
+  "scripts": {
+    "build-dev": "rollup -c rollup.config.js",
+    "build-prod": "rollup -c rollup.config.js"
+  },
+  "devDependencies": {
+    "rollup": "2.48.0",
+    "rollup-plugin-terser": "7.0.2"
+  }
+}
